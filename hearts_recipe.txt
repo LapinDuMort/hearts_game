@@ -1,0 +1,19 @@
+Phase 1 - 
+
+General concepts of cards, players and hands:
+
+    Cards (Card class and 52 instances thereof?) can be shuffled and dealt to 4 Player objects
+    Concept of a "hand" is created for a Player, with some way to print that in an appropriate fashion to the terminal
+
+Requirements: Create a class representing a deck of cards, and a player class containing a hand of cards.
+
+Will be importing the Random module to allow shuffling and dealing.
+
+Class structure:
+
+Deck of Cards, containing lists of Suits and Values, which has the functions:
+Shuffle, which creates a randomised list of cards
+Deal, which deals a hand of cards to a player by popping cards from the deck.
+
+Player will have an identifying feature, and have a hand which will be an empty list,
+which we can populate from the cards drawn.
