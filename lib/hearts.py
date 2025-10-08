@@ -25,6 +25,12 @@ class Hearts():
     #Initialise first player, a category granted to whomever holds the 2 of Clubs, or who has won the previous trick
         first_player = ""
         self.first_player = first_player
+    
+    #Initialise Trick Suit and a Hearts Broken bool
+        trick_suit = ""
+        hearts_broken = False
+        self.trick_suit = trick_suit
+        self.hearts_broken = hearts_broken
 
 
 
@@ -42,25 +48,45 @@ class Hearts():
                 self.player_4.hand.append(self.new_deck.deal())
                 x = 0
             x += 1
-        self.player_1.hand.sort()
+        #Ugly sort function that sorts by suit, and then rank    
+        self.player_1.hand.sort(key=lambda val: ((self.new_deck.sort_suit[val[1]]), self.new_deck.sort_rank[val[0]]))
 
 #Define a function that accepts the number of cards in a hand, allows a user to numerically pick one and will loop if an invalid choice is made.
-    def card_select(self, cards):
+    def card_select_any(self, cards):
         user_choice = None
         if cards == 0:
             print("Hand is empty! End of round!")
             return None
         
         while True:
+            try:
+                user_choice = input("Please select which number of card you would like to play: ")
+                
+                if user_choice == "h" or user_choice == "H":
+                    x = 1
+                    for i in self.player_1.hand:
+                        print(f"{x}: {i[0]} of {i[1]}")
+                        x += 1
+                elif int(user_choice) >= 1 and int(user_choice) <= cards:
+                    return int(user_choice)
+                else:
+                    print("That doesn't seem to be a valid choice! Please select a number for a card in your hand, or type [H] to see which cards are available.")
+            except:
+                print("That doesn't seem to be a valid choice! Please select a number for a card in your hand, or type [H] to see which cards are available. ")
+    
+    # Define a function that works like card_select_any but ONLY allows a choice of cards from the valid trick suit
+    def card_select_suit(self, cards, valid_cards):
+        user_choice = None
+        while True:
             if user_choice == "h" or user_choice == "H":
                 x = 1
-                for i in self.player_1.hand:
+                for i in valid_cards:
                     print(f"{x}: {i[0]} of {i[1]}")
                     x += 1
             try:
                 user_choice = input("Please select which number of card you would like to play: ")
                 if int(user_choice) >= 1 and int(user_choice) <= cards:
-                    return int(user_choice)
+                    return valid_cards[int(user_choice) -1]
                 else:
                     print("That doesn't seem to be a valid choice! Please select a number for a card in your hand, or type [H] to see which cards are available.")
             except:
@@ -77,10 +103,12 @@ class Hearts():
         else:
             self.c_trick.append(card)
             print(self.c_trick)
+    
     #Define a function to check if the trick reaches four items, if it does, it will add them to the player's tricks and clear the trick
     def trick_check(self):
         if len(self.c_trick) == 4:
             print("Trick completed!")
+            self.trick_suit == ""
             self.player_1.tricks.append(self.c_trick)
             self.c_trick = []
             print(f"Your current completed tricks are {self.player_1.tricks}")
@@ -109,18 +137,47 @@ class Hearts():
             self.trick_check()
             time.sleep(1)
 
+    # This function prompts the player to 
     def player_play(self):
-        selection = self.card_select(len(self.player_1.hand)-1)
-        try:
-            self.trick(self.player_1.hand.pop(selection-1))
-        except:
-            quit()
-        time.sleep(1)
+        cards_in_suit = False
+        valid_cards = []
+        if self.trick_suit == "":
+            selection = self.card_select_any(len(self.player_1.hand))
+            try:
+                self.trick(self.player_1.hand.pop(selection-1))
+            except:
+                quit()
+            time.sleep(1)
+        elif self.trick_suit != "":
+            
+            for i in self.player_1.hand:
+                if i[1] == self.trick_suit:
+                    cards_in_suit = True
+                    valid_cards.append(i)
 
+        if cards_in_suit == True:            
+            selection = self.card_select_suit(len(valid_cards), valid_cards)
+            self.player_1.hand.remove(selection)
+            self.trick(selection)
+        
+        else:
+            selection = self.card_select_any(len(self.player_1.hand))
+            try:
+                self.trick(self.player_1.hand.pop(selection-1))
+            except:
+                quit()
+            time.sleep(1)
+
+    #Defines order of play. Checks who is the first player, then does one iteration to that goes 1 > 2 > 3 > 4 > 1
+    #After the first card is played, sets the suit of the trick to that card.
     def play_order(self, player):
         x = player
         cards_played = 0
-        while cards_played < 4:
+
+        while cards_played < 5:
+            if cards_played == 1:
+                self.trick_suit = self.c_trick[0][1]
+
             if x == 1:
                 self.player_play()
                 x += 1
@@ -133,7 +190,7 @@ class Hearts():
                 else:
                     x += 1
                     cards_played += 1
-                    
+
     #Gameplay loop! Shows your hand, the current trick, and triggers card selection as well as the bot card selection
     def hand_start(self):
         print("Your hand contains: ")

@@ -22,6 +22,14 @@ def test_equal_hands():
 def test_tricks():
     hearts = Hearts()
     hearts.deal_opening_hands()
-    hearts.bot_play()
-    result = hearts.c_trick
+    hearts.play_order(1)
+    result = hearts.player_1.tricks
     assert len(result) != 0
+
+def test_first_player():
+    hearts = Hearts()
+    hearts.deal_opening_hands()
+    hearts.find_first_player()
+    result = hearts.first_player
+    values = [1, 2, 3, 4]
+    assert result in values
