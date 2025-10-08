@@ -1,8 +1,8 @@
 #This will act as the 'Main' for this project
 
 #Importing the information from the Deck and Player classes
-from lib.deck import *
-from lib.player import *
+from deck import *
+from player import *
 import time
 
 class Hearts():
@@ -110,7 +110,7 @@ class Hearts():
             time.sleep(1)
 
     def player_play(self):
-        selection = self.card_select(x-1)
+        selection = self.card_select(len(self.player_1.hand)-1)
         try:
             self.trick(self.player_1.hand.pop(selection-1))
         except:
@@ -119,11 +119,21 @@ class Hearts():
 
     def play_order(self, player):
         x = player
-        if x == 1:
-            self.player_play()
-        elif x != 1:
-            self.bot_play(x)
-
+        cards_played = 0
+        while cards_played < 4:
+            if x == 1:
+                self.player_play()
+                x += 1
+                cards_played += 1
+            elif x != 1:
+                self.bot_play(x)
+                if x == 4:
+                    x = 1
+                    cards_played += 1
+                else:
+                    x += 1
+                    cards_played += 1
+                    
     #Gameplay loop! Shows your hand, the current trick, and triggers card selection as well as the bot card selection
     def hand_start(self):
         print("Your hand contains: ")
@@ -135,8 +145,21 @@ class Hearts():
         print(self.trick())
         self.trick_check()
         self.play_order(self.first_player)
-        self.player_play()
-        self.bot_play()
+
+    def find_first_player(self):
+        for i in self.player_1.hand:
+            if i == ['2', 'Clubs']:
+                self.first_player = 1
+        for i in self.player_2.hand:
+            if i == ['2', 'Clubs']:
+                self.first_player = 2
+        for i in self.player_3.hand:
+            if i == ['2', 'Clubs']:
+                self.first_player = 3
+        for i in self.player_4.hand:
+            if i == ['2', 'Clubs']:
+                self.first_player = 4
+
 
 #Initial Gameplay Loop
 def main():
@@ -144,5 +167,7 @@ def main():
     print("New Game beginning, get ready!")
     hearts = Hearts()
     hearts.deal_opening_hands()
+    hearts.find_first_player()
     while True:
         hearts.hand_start()
+main()
