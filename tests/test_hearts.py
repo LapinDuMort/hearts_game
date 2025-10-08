@@ -18,3 +18,10 @@ def test_equal_hands():
     result_1 = hearts.player_2.hand
     result_2 = hearts.player_4.hand
     assert len(result_1) == len(result_2) and result_1 != result_2
+
+def test_tricks():
+    hearts = Hearts()
+    hearts.deal_opening_hands()
+    hearts.bot_play()
+    result = hearts.c_trick
+    assert len(result) != 0

@@ -22,3 +22,44 @@ which we can populate from the cards drawn.
 
 
 Phase 2
+Ability to play cards, 13 "tricks" making a full round:
+
+    Some user interaction such that the user can choose what card to play from their own hand
+    "Bot" hands to play a card, chosen randomly for now (restrictions on who can play what, and who leads, to come later)
+    Forming of "tricks" - 4 cards, 1 from each player - kept and preserved such that they can belong to a player who won that trick, later on
+
+Requirements:
+
+User to select a card from their hand to "play" it. The three other 'players' will then play a card each. 
+Rules surrounding valid plays etc. are *not* to be implemented in this step.
+After user plays their card, each other player will play a card. Once a full rotation is complete, the "trick" will be stored
+and a new hand begins.
+For now, the user will always go first, and the trick will be stored but not assigned to a player.
+
+Structure:
+Add a list to player class to accept a Trick whenever one is completed. For now these will all go to the User, later they will be given to the winner.
+Accept User Input to play a card. Initally we will accept a number, to select the card, or return an error if the card is not in the hand.
+Card will be popped from hand and put into the trick, three other cards will randomly be put in, then the trick will be stored in the players trick library.
+
+Phase 3 - 
+
+Basic rules introduced:
+
+    2 Clubs owner goes first and plays that card first
+    Players must follow suit, if possible
+    Tricks are won by the player with the highest card of the leading suit (for now)
+    Player who won the trick plays first card of next trick
+
+Requirements:
+
+Turn order will be initially given to whomever holds the 2 of Clubs. Play will then progress clockwise 1>2>3>4>1
+At the end of each trick, "first_player" will be updated by whomever played the highest value rank in the first player's suit.
+Tricks will be passed to the person who won the trick, rather than the user.
+Finally, both bots and players will only be allowed to play cards matching the suit of the first player UNLESS they cannot do so, then any card may be played.
+
+Structure:
+
+Replace User going first with a check on all hands for 2 of clubs, making that player the first player. 
+Create a structure for 1st, 2nd, 3rd, 4th player that will have them play their cards in order, allowing the user to fall into any position.
+Check the 'Leading Suit' and then check if that suit exists in each players hand. If it does, only allow them to play that suit, otherwise, let them play anything.
+Check for highest value card in the 'Leading Suit', make that player the winner, give them the trick, then make them the first player.
