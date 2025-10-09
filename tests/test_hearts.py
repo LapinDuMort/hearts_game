@@ -33,3 +33,11 @@ def test_first_player():
     result = hearts.first_player
     values = [1, 2, 3, 4]
     assert result in values
+
+def test_hand_select():
+    hearts = Hearts()
+    hearts.deal_opening_hands()
+    hearts.find_first_player()
+    hearts.play_order(hearts.first_player)
+    value = hearts.player_1.tricks[0]
+    assert value[0][1] == value[1][1]
