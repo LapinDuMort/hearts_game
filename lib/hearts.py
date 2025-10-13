@@ -34,18 +34,18 @@ class Hearts():
 
 
 
-#Loops through the shuffled deck, dealing one card to each player until the deck is empty
+#Loops through the shuffled deck, dealing one card to each player until the deck is empty   
     def deal_opening_hands(self):
         x = 1
         for deal in range(len(self.new_deck.deck)):
             if x == 1: 
-                self.player_1.hand.append(self.new_deck.deal())
+                self.player_1.add_to_hand(self.new_deck.deal())
             elif x == 2:
-                self.player_2.hand.append(self.new_deck.deal())
+                self.player_2.add_to_hand(self.new_deck.deal())
             elif x == 3:
-                self.player_3.hand.append(self.new_deck.deal())
+                self.player_3.add_to_hand(self.new_deck.deal())
             else:
-                self.player_4.hand.append(self.new_deck.deal())
+                self.player_4.add_to_hand(self.new_deck.deal())
                 x = 0
             x += 1
         #Ugly sort function that sorts by suit, and then rank    
@@ -206,24 +206,22 @@ class Hearts():
     #After the first card is played, sets the suit of the trick to that card.
     def play_order(self, player):
         x = player
-        cards_played = 0
 
-        while cards_played < 4:
+
+        for cards_played in range(4):
             if cards_played == 1:
                 self.trick_suit = self.c_trick[0][1]
 
             if x == 1:
                 self.player_play()
                 x += 1
-                cards_played += 1
             elif x != 1:
                 self.bot_play(x)
                 if x == 4:
                     x = 1
-                    cards_played += 1
                 else:
                     x += 1
-                    cards_played += 1
+
 
     #Gameplay loop! Shows your hand, the current trick, and triggers card selection as well as the bot card selection
     def hand_start(self):
@@ -239,27 +237,11 @@ class Hearts():
 
     #Checks each players hand and sets the person who holds the 2 of Clubs as the first player
     def find_first_player(self):
-        for card in self.player_1.hand:
-            if card == ['2', 'Clubs']:
-                self.first_player = 1
-        for card in self.player_2.hand:
-            if card == ['2', 'Clubs']:
-                self.first_player = 2
-        for card in self.player_3.hand:
-            if card == ['2', 'Clubs']:
-                self.first_player = 3
-        for card in self.player_4.hand:
-            if card == ['2', 'Clubs']:
-                self.first_player = 4
-
-
-#Initial Gameplay Loop
-def main():
-    print("Welcome, Player!")
-    print("New Game beginning, get ready!")
-    hearts = Hearts()
-    hearts.deal_opening_hands()
-    hearts.find_first_player()
-    while True:
-        hearts.hand_start()
-#main()
+        if self.player_1.is_first():
+            self.first_player = 1
+        elif self.player_2.is_first():
+            self.first_player = 2
+        elif self.player_3.is_first():
+            self.first_player = 3
+        else:
+            self.first_player = 4

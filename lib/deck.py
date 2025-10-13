@@ -9,7 +9,7 @@ class Deck():
         deck = []
         for i in ranks:
             for j in suits:
-                deck.append([i,j])
+                deck.append((i,j))
         self.deck = deck
     #Assign values for sorting/scoring hands
         sort_suit = {"Hearts":0, "Clubs":1, "Diamonds":2, "Spades":3}

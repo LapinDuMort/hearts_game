@@ -59,7 +59,15 @@ Finally, both bots and players will only be allowed to play cards matching the s
 
 Structure:
 
-Replace User going first with a check on all hands for 2 of clubs, making that player the first player. 
+Replace User going first with a check on all hands for 2 of clubs, making that player the first player and forcing their first play to be the 2 of Clubs.
 Create a structure for 1st, 2nd, 3rd, 4th player that will have them play their cards in order, allowing the user to fall into any position.
 Check the 'Leading Suit' and then check if that suit exists in each players hand. If it does, only allow them to play that suit, otherwise, let them play anything.
 Check for highest value card in the 'Leading Suit', make that player the winner, give them the trick, then make them the first player.
+
+Options for tricks - 
+Create a trick class to store logic? Or segment score logic to another document, if expected to be very complex.
+Calculate in the main code- set the first player as the winner, then unseat them if another player plays the same suit, but a higher value card. Fine if logic winds up being very short.
+
+
+
+** You don't need to know what you're doing or how- but you want to know the behaviour and output**
